@@ -140,11 +140,15 @@
     <div class="hero-right">
       <div class="hero-card">
         <h3>Get a Free Estimate</h3>
-        <form class="quote-form" action="contact.html">
+        <div id="hero-success" style="display:none; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.3); border-radius:6px; padding:24px; text-align:center; color:#fff;">
+          <div style="font-size:2rem; margin-bottom:8px;">✓</div>
+          <strong>Got it! We'll be in touch soon.</strong>
+        </div>
+        <form class="quote-form" id="heroForm">
           <label for="name">Your Name</label>
-          <input type="text" id="name" placeholder="John Smith">
+          <input type="text" id="name" name="name" placeholder="John Smith">
           <label for="service">Service Needed</label>
-          <select id="service">
+          <select id="service" name="service">
             <option value="">Select a service...</option>
             <option>Driveway / Walkway Cleaning</option>
             <option>House Exterior Washing</option>
@@ -155,9 +159,28 @@
             <option>Commercial Property</option>
           </select>
           <label for="phone">Phone Number</label>
-          <input type="tel" id="phone" placeholder="(425) 368-5598">
-          <button type="submit" class="btn btn-primary" style="width:100%">Request Free Quote →</button>
+          <input type="tel" id="phone" name="phone" placeholder="(425) 368-5598">
+          <button type="submit" id="heroBtn" class="btn btn-primary" style="width:100%">Request Free Quote →</button>
         </form>
+        <script>
+          document.getElementById('heroForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var btn = document.getElementById('heroBtn');
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+            var formData = new FormData(this);
+            fetch('https://script.google.com/macros/s/AKfycbw8XHctKWLP7inKukiq9E9yPiE982aMnnBpMThk20vU7qPjHnmXNTUjPH3p9JM_pV9yJQ/exec', {
+              method: 'POST',
+              body: formData
+            }).then(function() {
+              document.getElementById('heroForm').style.display = 'none';
+              document.getElementById('hero-success').style.display = 'block';
+            }).catch(function() {
+              btn.textContent = 'Request Free Quote →';
+              btn.disabled = false;
+            });
+          });
+        </script>
       </div>
     </div>
   </div>
