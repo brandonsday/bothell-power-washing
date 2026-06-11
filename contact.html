@@ -44,22 +44,24 @@
     <div class="contact-grid">
       <div class="contact-form-box">
         <h2>Request a Free Estimate</h2>
-        <form>
+        <div id="form-success" style="display:none; background:#d4edda; color:#155724; padding:16px 20px; border-radius:4px; margin-bottom:20px; font-weight:600;">✓ Got it! We'll call you back within the hour.</div>
+        <div id="form-error" style="display:none; background:#f8d7da; color:#721c24; padding:16px 20px; border-radius:4px; margin-bottom:20px;">Something went wrong. Please call us at <a href="tel:4253685598">(425) 368-5598</a>.</div>
+        <form id="quoteForm">
           <div class="form-group">
             <label>Your Name</label>
-            <input type="text" placeholder="John Smith" required>
+            <input type="text" name="name" placeholder="John Smith" required>
           </div>
           <div class="form-group">
             <label>Phone Number</label>
-            <input type="tel" placeholder="(425) 368-5598" required>
+            <input type="tel" name="phone" placeholder="(425) 368-5598" required>
           </div>
           <div class="form-group">
             <label>Email Address</label>
-            <input type="email" placeholder="john@email.com">
+            <input type="email" name="email" placeholder="john@email.com">
           </div>
           <div class="form-group">
             <label>Service Needed</label>
-            <select>
+            <select name="service">
               <option value="">Select a service...</option>
               <option>Driveway / Walkway Cleaning</option>
               <option>House Exterior Washing</option>
@@ -73,14 +75,34 @@
           </div>
           <div class="form-group">
             <label>Property Address / City</label>
-            <input type="text" placeholder="123 Main St, Bothell, WA">
+            <input type="text" name="address" placeholder="123 Main St, Bothell, WA">
           </div>
           <div class="form-group">
             <label>Tell Us More (optional)</label>
-            <textarea rows="4" placeholder="Describe the job — size of driveway, type of siding, how much moss, etc."></textarea>
+            <textarea name="message" rows="4" placeholder="Describe the job — size of driveway, type of siding, how much moss, etc."></textarea>
           </div>
-          <button type="submit" class="btn btn-primary btn-lg" style="width:100%;">Send Quote Request →</button>
+          <button type="submit" id="submitBtn" class="btn btn-primary btn-lg" style="width:100%;">Send Quote Request →</button>
         </form>
+        <script>
+          document.getElementById('quoteForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var btn = document.getElementById('submitBtn');
+            btn.textContent = 'Sending...';
+            btn.disabled = true;
+            var formData = new FormData(this);
+            fetch('https://script.google.com/macros/s/AKfycbw8XHctKWLP7inKukiq9E9yPiE982aMnnBpMThk20vU7qPjHnmXNTUjPH3p9JM_pV9yJQ/exec', {
+              method: 'POST',
+              body: formData
+            }).then(function() {
+              document.getElementById('quoteForm').style.display = 'none';
+              document.getElementById('form-success').style.display = 'block';
+            }).catch(function() {
+              document.getElementById('form-error').style.display = 'block';
+              btn.textContent = 'Send Quote Request →';
+              btn.disabled = false;
+            });
+          });
+        </script>
       </div>
 
       <div class="contact-info-box">
